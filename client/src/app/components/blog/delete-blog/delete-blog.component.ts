@@ -21,43 +21,36 @@ export class DeleteBlogComponent implements OnInit {
     private router: Router
   ) { }
 
-  // Function to delete blogs
   deleteBlog() {
-    this.processing = true; // Disable buttons
-    // Function for DELETE request
+    this.processing = true;
     this.blogService.deleteBlog(this.currentUrl.id).subscribe(data => {
-      // Check if delete request worked
       if (!data.success) {
-        this.messageClass = 'alert alert-danger'; // Return error bootstrap class
-        this.message = data.message; // Return error message
+        this.messageClass = 'alert alert-danger';
+        this.message = data.message;
       } else {
-        this.messageClass = 'alert alert-success'; // Return bootstrap success class
-        this.message = data.message; // Return success message
-        // After two second timeout, route to blog page
+        this.messageClass = 'alert alert-success';
+        this.message = data.message;
         setTimeout(() => {
-          this.router.navigate(['/blog']); // Route users to blog page
+          this.router.navigate(['/blog']);
         }, 2000);
       }
     });
   }
 
   ngOnInit() {
-    this.currentUrl = this.activatedRoute.snapshot.params; // Get URL paramaters on page load
-    // Function for GET request to retrieve blog
+    this.currentUrl = this.activatedRoute.snapshot.params;
     this.blogService.getSingleBlog(this.currentUrl.id).subscribe(data => {
-      // Check if request was successfull
       if (!data.success) {
-        this.messageClass = 'alert alert-danger'; // Return bootstrap error class
-        this.message = data.message; // Return error message
+        this.messageClass = 'alert alert-danger';
+        this.message = data.message;
       } else {
-        // Create the blog object to use in HTML
         this.blog = {
-          title: data.blog.title, // Set title
-          body: data.blog.body, // Set body
-          createdBy: data.blog.createdBy, // Set created_by field
-          createdAt: data.blog.createdAt // Set created_at field
+          title: data.blog.title,
+          body: data.blog.body,
+          createdBy: data.blog.createdBy,
+          createdAt: data.blog.createdAt
         }
-        this.foundBlog = true; // Displaly blog window
+        this.foundBlog = true;
       }
     });
   }

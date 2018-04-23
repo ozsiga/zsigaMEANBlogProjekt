@@ -36,12 +36,12 @@ export class LoginComponent implements OnInit {
     });
   }
   disableForm() {
-    this.form.controls['username'].disable(); // Disable username field
-    this.form.controls['password'].disable(); // Disable password field
+    this.form.controls['username'].disable();
+    this.form.controls['password'].disable();
   }
   enableForm() {
-    this.form.controls['username'].enable(); // Enable username field
-    this.form.controls['password'].enable(); // Enable password field
+    this.form.controls['username'].enable();
+    this.form.controls['password'].enable();
   }
   onLoginSubmit() {
     this.processing = true;

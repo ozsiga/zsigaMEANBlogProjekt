@@ -1,4 +1,4 @@
-const User = require('../models/user'); // Import User Model Schema
+const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 
@@ -59,20 +59,17 @@ module.exports = (router) => {
 
 
     router.get('/checkEmail/:email', (req, res) => {
-        // Check if email was provided in paramaters
         if (!req.params.email) {
-            res.json({ success: false, message: 'E-mail was not provided' }); // Return error
+            res.json({ success: false, message: 'E-mail was not provided' });
         } else {
-            // Search for user's e-mail in database;
             User.findOne({ email: req.params.email }, (err, user) => {
                 if (err) {
-                    res.json({ success: false, message: err }); // Return connection error
+                    res.json({ success: false, message: err });
                 } else {
-                    // Check if user's e-mail is taken
                     if (user) {
-                        res.json({ success: false, message: 'E-mail is already taken' }); // Return as taken e-mail
+                        res.json({ success: false, message: 'E-mail is already taken' });
                     } else {
-                        res.json({ success: true, message: 'E-mail is available' }); // Return as available e-mail
+                        res.json({ success: true, message: 'E-mail is available' });
                     }
                 }
             });
@@ -98,11 +95,10 @@ module.exports = (router) => {
 
     router.post("/login", (req, res) => {
         if (!req.body.username) {
-            res.json({ success: false, message: 'No username was provided' }); // Return error
+            res.json({ success: false, message: 'No username was provided' });
         } else {
-            // Check if password was provided
             if (!req.body.password) {
-                res.json({ success: false, message: 'No password was provided.' }); // Return error
+                res.json({ success: false, message: 'No password was provided.' });
             } else {
                 User.findOne({ username: req.body.username.toLowerCase() }, (err, user) => {
                     if (err) {
@@ -154,6 +150,23 @@ module.exports = (router) => {
             }
         })
     })
+    router.get('/publicProfile/:username', (req, res) => {
+        if (!req.params.username) {
+            res.json({ success: false, message: 'No username was provided' });
+        } else {
+            User.findOne({ username: req.params.username }).select('username email').exec((err, user) => {
+                if (err) {
+                    res.json({ success: false, message: 'Something went wrong.' });
+                } else {
+                    if (!user) {
+                        res.json({ success: false, message: 'Username not found.' });
+                    } else {
+                        res.json({ success: true, user: user });
+                    }
+                }
+            });
+        }
+    });
 
     return router;
 

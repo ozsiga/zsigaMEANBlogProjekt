@@ -32,24 +32,22 @@ export class RegisterComponent implements OnInit {
   createform() {
     this.form = this.formbuilder.group({
       email: ['', Validators.compose([
-        Validators.required, // Field is required
-        Validators.minLength(5), // Minimum length is 5 characters
-        Validators.maxLength(30), // Maximum length is 30 characters
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(30),
         this.validateEmail
       ])],
-      // Username Input
       username: ['', Validators.compose([
-        Validators.required, // Field is required
-        Validators.minLength(3), // Minimum length is 3 characters
-        Validators.maxLength(15), // Maximum length is 15 characters
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(15),
         this.validateUsername
 
       ])],
-      // Password Input
       password: ['', Validators.compose([
-        Validators.required, // Field is required
-        Validators.minLength(8), // Minimum length is 8 characters
-        Validators.maxLength(35), // Maximum length is 35 characters
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(35),
         this.validatePassword
 
       ])],
@@ -95,13 +93,11 @@ export class RegisterComponent implements OnInit {
   }
 
   validatePassword(controls) {
-    // Create a regular expression
     const regExp = new RegExp(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[\d])(?=.*?[\W]).{8,35}$/);
-    // Test password against regular expression
     if (regExp.test(controls.value)) {
-      return null; // Return as valid password
+      return null;
     } else {
-      return { 'validatePassword': true }; // Return as invalid password
+      return { 'validatePassword': true };
     }
   }
   matchingPasswords(password, confirm) {
@@ -127,18 +123,16 @@ export class RegisterComponent implements OnInit {
     };
 
     this.authService.registerUser(user).subscribe(data => {
-      // Resposne from registration attempt
       if (!data.success) {
-        this.messageClass = 'alert alert-danger'; // Set an error class
-        this.message = data.message; // Set an error message
-        this.processing = false; // Re-enable submit button
-        this.enableForm(); // Re-enable form
+        this.messageClass = 'alert alert-danger';
+        this.message = data.message;
+        this.processing = false;
+        this.enableForm();
       } else {
-        this.messageClass = 'alert alert-success'; // Set a success class
-        this.message = data.message; // Set a success message
-        // After 2 second timeout, navigate to the login page
+        this.messageClass = 'alert alert-success';
+        this.message = data.message;
         setTimeout(() => {
-          this.router.navigate(['/login']); // Redirect to login view
+          this.router.navigate(['/login']);
         }, 2000);
       }
     });
@@ -146,15 +140,13 @@ export class RegisterComponent implements OnInit {
   }
 
   checkEmail() {
-    // Function from authentication file to check if e-mail is taken
     this.authService.checkEmail(this.form.get('email').value).subscribe(data => {
-      // Check if success true or false was returned from API
       if (!data.success) {
-        this.emailValid = false; // Return email as invalid
-        this.emailMessage = data.message; // Return error message
+        this.emailValid = false;
+        this.emailMessage = data.message;
       } else {
-        this.emailValid = true; // Return email as valid
-        this.emailMessage = data.message; // Return success message
+        this.emailValid = true;
+        this.emailMessage = data.message;
       }
     });
   }

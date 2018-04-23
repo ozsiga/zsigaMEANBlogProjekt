@@ -33,14 +33,14 @@ export class EditBlogComponent implements OnInit {
     this.processing = true;
     this.blogService.editBlog(this.blog).subscribe(data => {
       if (!data.success) {
-        this.messageClass = 'alert alert-danger'; // Set error bootstrap class
-        this.message = data.message; // Set error message
-        this.processing = false; // Unlock form fields
+        this.messageClass = 'alert alert-danger';
+        this.message = data.message;
+        this.processing = false;
       } else {
-        this.messageClass = 'alert alert-success'; // Set success bootstrap class
-        this.message = data.message; // Set success message
+        this.messageClass = 'alert alert-success';
+        this.message = data.message;
         setTimeout(() => {
-          this.router.navigate(['/blog']); // Navigate back to route page
+          this.router.navigate(['/blog']);
         }, 2000);
       }
     });
