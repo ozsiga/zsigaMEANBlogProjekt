@@ -25,7 +25,7 @@
           <a *ngIf="authService.loggedIn()" routerLink="/profile">Profile</a>
         </li>
         <li>
-          <a *ngIf="authService.loggedIn()" href="#contact">Blog</a>
+          <a *ngIf="authService.loggedIn()" routerLink="/blog">Blog</a>
         </li>
         <li>
           <a *ngIf="!authService.loggedIn()" routerLink="/login">Login</a>
