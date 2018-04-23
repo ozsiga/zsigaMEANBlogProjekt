@@ -54,6 +54,7 @@ export class LoginComponent implements OnInit {
       if (!data.success) {
         this.messageClass = 'alert alert-danger';
         this.message = data.message;
+        console.log(this.message);
         this.processing = false;
         this.enableForm();
       } else {

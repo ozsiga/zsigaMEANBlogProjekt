@@ -83,6 +83,7 @@ export class BlogComponent implements OnInit {
       body: this.form.get('body').value,
       createdBy: this.username
     };
+    console.log(blog);
 
     this.blogService.newBlog(blog).subscribe(data => {
       if (!data.success) {
@@ -118,7 +119,9 @@ export class BlogComponent implements OnInit {
   ngOnInit() {
     this.authService.getProfile().subscribe(profile => {
       this.username = profile.user.username;
+      console.log(profile);
     });
+
     this.getAllBlogs();
   }
 
