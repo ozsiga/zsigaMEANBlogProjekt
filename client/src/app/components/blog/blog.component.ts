@@ -15,9 +15,12 @@ export class BlogComponent implements OnInit {
   newPost = false;
   loadingBlogs = false;
   form;
+  commentForm;
   processing = false;
   username;
   blogPosts;
+  newComment = [];
+  enabledComments = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -25,8 +28,8 @@ export class BlogComponent implements OnInit {
     private blogService: BlogService
   ) {
     this.createNewBlogForm();
+    this.createCommentForm();
   }
-
   createNewBlogForm() {
     this.form = this.formBuilder.group({
       title: ['', Validators.compose([
@@ -42,7 +45,22 @@ export class BlogComponent implements OnInit {
       ])]
     });
   }
+  createCommentForm() {
+    this.commentForm = this.formBuilder.group({
+      comment: ['', Validators.compose([
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(200)
+      ])]
+    });
+  }
+  enableCommentForm() {
+    this.commentForm.get('comment').enable();
+  }
 
+  disableCommentForm() {
+    this.commentForm.get('comment').disable();
+  }
   enableFormNewBlogForm() {
     this.form.get('title').enable();
     this.form.get('body').enable();
@@ -71,8 +89,17 @@ export class BlogComponent implements OnInit {
       this.loadingBlogs = false;
     }, 4000);
   }
-  draftComment() {
-
+  draftComment(id) {
+    this.commentForm.reset();
+    this.newComment = [];
+    this.newComment.push(id);
+  }
+  cancelSubmission(id) {
+    const index = this.newComment.indexOf(id);
+    this.newComment.splice(index, 1);
+    this.commentForm.reset();
+    this.enableCommentForm();
+    this.processing = false;
   }
   onBlogSubmit() {
     this.processing = true;
@@ -127,6 +154,27 @@ export class BlogComponent implements OnInit {
       this.getAllBlogs();
     });
   }
+  postComment(id) {
+    this.disableCommentForm();
+    this.processing = true;
+    const comment = this.commentForm.get('comment').value;
+    this.blogService.postComment(id, comment).subscribe(data => {
+      this.getAllBlogs();
+      const index = this.newComment.indexOf(id);
+      this.newComment.splice(index, 1);
+      this.enableCommentForm();
+      this.commentForm.reset();
+      this.processing = false;
+    });
+  }
+  expand(id) {
+    this.enabledComments.push(id);
+  }
+  collapse(id) {
+    const index = this.enabledComments.indexOf(id);
+    this.enabledComments.splice(index, 1);
+  }
+
   ngOnInit() {
     this.authService.getProfile().subscribe(profile => {
       this.username = profile.user.username;
